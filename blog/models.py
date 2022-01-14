@@ -4,7 +4,9 @@ import os
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
-    content = models.TextField()
+    #요약문
+    hook_text = models.CharField(max_length=100, blank=True)
+    content = models.TextField(null=True)
 
     # 이미지 저장(head_image, blank=True는 있어도되고 없어도 된다는 뜻)
     head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d', blank=True)
