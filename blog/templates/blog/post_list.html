@@ -10,15 +10,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="#">Do it django</a>
-        <button
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -35,20 +28,11 @@
                     <a class="nav-link" href="./about_me.html">About me</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a
-                            class="nav-link dropdown-toggle"
-                            href="#"
-                            id="navbarDropdownMenuLink"
-                            role="button"
-                            data-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-toggle="dropdown" aria-expanded="false">
                         Dropdown link
                     </a>
-                    <div
-                            class="dropdown-menu"
-                            aria-labelledby="navbarDropdownMenuLink"
-                    >
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
                         <a class="dropdown-item" href="#">Something else here</a>
@@ -57,38 +41,21 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a
-                            class="nav-link"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#loginModal"
-                    >Log In</a
-                    >
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 <!-- Modal -->
-<div
-        class="modal fade"
-        id="loginModal"
-        tabindex="-1"
-        aria-labelledby="loginModalLabel"
-        aria-hidden="true"
->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">
                     <i class="fas fa-sign-in-alt"></i> Log In
                 </h5>
-                <button
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                >
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -96,26 +63,17 @@
                 <!-- 로그인 버튼 부분 -->
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <button
-                                type="button"
-                                class="btn btn-outline-dark btn-block btn-sm"
-                        >
+                        <button type="button" class="btn btn-outline-dark btn-block btn-sm">
                             <i class="fab fa-google"></i>
                             Log in with Google
                         </button>
-                        <button
-                                type="button"
-                                class="btn btn-outline-dark btn-block btn-sm"
-                        >
+                        <button type="button" class="btn btn-outline-dark btn-block btn-sm">
                             <i class="fas fa-user"></i>
                             Log in with Username
                         </button>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <button
-                                type="button"
-                                class="btn btn-outline-dark btn-block btn-sm"
-                        >
+                        <button type="button" class="btn btn-outline-dark btn-block btn-sm">
                             <i class="fas fa-envelope"></i>
                             Sign up with E-mail
                         </button>
@@ -123,11 +81,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Close
                 </button>
             </div>
@@ -142,7 +96,11 @@
             {% for p in post_list %}
             <!-- Blog post -->
             <div class="card mb-4">
-                <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p.title }}"/>
+                {% if p.head_image %}
+                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p.title }}"/>
+                {% else %}
+                    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/600/200" alt="{{ p.title }}"/>
+                {% endif %}
                 <div class="card-body">
                     <h2 class="card-title">{{ p.title }}</h2>
                     <p class="card-text">{{ p.content }}</p>
