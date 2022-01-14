@@ -90,21 +90,23 @@
 </div>
 <div class="container">
     <div class="row my-3">
-        <div class="col-md-8 col-lg-9">
+        <div class="col-md-8 col-lg-9" id="main-area">
             <h1>Blog</h1>
+
+            {% if post_list.exists %}
 
             {% for p in post_list %}
             <!-- Blog post -->
             <div class="card mb-4">
                 {% if p.head_image %}
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p.title }}"/>
+                <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p.title }}"/>
                 {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/600/200" alt="{{ p.title }}"/>
+                <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/600/200" alt="{{ p.title }}"/>
                 {% endif %}
                 <div class="card-body">
                     <h2 class="card-title">{{ p.title }}</h2>
                     {% if p.hook_text %}
-                        <h5 class="text-muted">{{ p.hook_text }}</h5>
+                    <h5 class="text-muted">{{ p.hook_text }}</h5>
                     {% endif %}
                     <p class="card-text">{{ p.content | truncatewords:40 }}</p>
                     <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
@@ -115,6 +117,9 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+            <h1>post is not exist</h1>
+            {% endif %}
 
             <!--pagination-->
             <ul class="pagination justify-content-center mb-4">
