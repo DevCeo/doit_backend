@@ -47,3 +47,34 @@ class TestView(TestCase):
         self.assertIn(post_002.title, main_area.text)
         # 3.4 "post is not exist" 라는 문구가 없어야 한다
         self.assertNotIn('post is not exist', main_area.text)
+
+    def test_post_detail(self):
+        # 1.1 포스트가 하나 있다
+        post_001 = Post.objects.create(
+            title='첫 번째 포스트입니다.',
+            content='Hello, World',
+        )
+        self.assertEqual(Post.objects.count(), 1)
+        # 1.2 그 포스트의 url은 '/blog/1/'이다
+        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+
+        # 2 첫 번째 포스트의 상세 페이지 테스트
+        # 2.1 첫 번째 포스트의 url로 접근하면 정상적으로 res가온 다(status code: 200)
+        res = self.client.get(post_001.get_absolute_url())
+        self.assertEqual(res.status_code, 200)
+
+        soup = BeautifulSoup(res.content, 'html.parser')
+        # 2.2 포스트 목록 페이지와 똑같은 Navbar가 있다
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About me', navbar.text)
+        # 2.3 첫 번째 포스트의 제목이 웹 브라우저 탭 타이틀에 들어 있다
+        self.assertIn(post_001.title, soup.title)
+        # 2.4 첫 번째 포스트의 제목이 포스트 영역에 있다
+        main_area = soup.find('div', id='main-area')
+        post_area = main_area.find('div', id='post-area')
+        self.assertIn(post_001.title, post_area.text)
+        # 2.5 첫 번째 포스트의 작성자(author)가 포스트 영역에 있다
+        # 2.6 첫 번째 포스트의 내용(content)이 포스트 영역에 있다
+        self.assertIn(post_001.content, post_area.text)
+
