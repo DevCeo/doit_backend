@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 # Client = 웹을 방문하는 사람의 브라우저
+from django.contrib.auth.models import User
 from bs4 import BeautifulSoup
 from .models import Post
 
@@ -7,6 +8,14 @@ from .models import Post
 class TestView(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user_trump = User.objects.create_user(
+            username='trump',
+            password='password'
+        )
+        self.user_obama = User.objects.create_user(
+            username='obama',
+            password='password'
+        )
 
     def navbar_test(self, soup):
         navbar = soup.nav
@@ -46,10 +55,12 @@ class TestView(TestCase):
         post_001 = Post.objects.create(
             title='첫 번째 포스트입니다.',
             content='Hello, World',
+            author=self.user_trump,
         )
         post_002 = Post.objects.create(
             title='두 번째 포스트입니다.',
             content='We are the World',
+            author=self.user_obama,
         )
         self.assertEqual(Post.objects.count(), 2)
         # 3.2 포스트 목록 페이지를 새로 고침했을 때,
@@ -62,18 +73,22 @@ class TestView(TestCase):
         # 3.4 "post is not exist" 라는 문구가 없어야 한다
         self.assertNotIn('post is not exist', main_area.text)
 
+        self.assertIn(post_001.author.username.upper(), main_area.text)
+        self.assertIn(post_002.author.username.upper(), main_area.text)
+
     def test_post_detail(self):
         # 1.1 포스트가 하나 있다
         post_001 = Post.objects.create(
             title='첫 번째 포스트입니다.',
             content='Hello, World',
+            author=self.user_trump,
         )
         self.assertEqual(Post.objects.count(), 1)
         # 1.2 그 포스트의 url은 '/blog/1/'이다
         self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
 
         # 2 첫 번째 포스트의 상세 페이지 테스트
-        # 2.1 첫 번째 포스트의 url로 접근하면 정상적으로 res가온 다(status code: 200)
+        # 2.1 첫 번째 포스트의 url로 접근하면 정상적으로 res가 온다(status code: 200)
         res = self.client.get(post_001.get_absolute_url())
         self.assertEqual(res.status_code, 200)
 
@@ -87,6 +102,7 @@ class TestView(TestCase):
         post_area = main_area.find('div', id='post-area')
         self.assertIn(post_001.title, post_area.text)
         # 2.5 첫 번째 포스트의 작성자(author)가 포스트 영역에 있다
+        self.assertIn(self.user_trump.username.upper(), post_area.text)
         # 2.6 첫 번째 포스트의 내용(content)이 포스트 영역에 있다
         self.assertIn(post_001.content, post_area.text)
 
